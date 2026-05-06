@@ -3,6 +3,9 @@ import threading
 import tkinter as tk
 from crypto_utils import derive_key, encrypt, decrypt
 
+message_count = 0
+epoch = 0
+
 # --- Networking setup ---
 server = socket.socket()
 server.bind(("127.0.0.1", 5000))
@@ -16,6 +19,8 @@ key = derive_key(password)
 
 # --- GUI functions ---
 def send_message():
+    global message_count, epoch, key
+
     msg = entry.get()
     entry.delete(0, tk.END)
 
@@ -25,14 +30,31 @@ def send_message():
     chat_box.insert(tk.END, f"You (plain): {msg}\n")
     chat_box.insert(tk.END, f"You (cipher): {encrypted.hex()}\n\n")
 
+    # --- KEY UPDATE LOGIC ---
+    message_count += 1
+    if message_count % 20 == 0:
+        epoch += 1
+        key = derive_key(password + str(epoch))
+        print(f"[KEY UPDATE] New key derived for epoch {epoch}")
+
 def receive_messages():
+    global message_count, epoch, key
+
     while True:
         data = conn.recv(4096)
         if not data:
             break
+
         plaintext = decrypt(key, data)
         chat_box.insert(tk.END, f"Alice (cipher): {data.hex()}\n")
         chat_box.insert(tk.END, f"Alice (plain): {plaintext}\n\n")
+
+        # --- KEY UPDATE LOGIC ---
+        message_count += 1
+        if message_count % 20 == 0:
+            epoch += 1
+            key = derive_key(password + str(epoch))
+            print(f"[KEY UPDATE] New key derived for epoch {epoch}")
 
 # --- GUI setup ---
 root = tk.Tk()
