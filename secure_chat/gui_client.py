@@ -8,7 +8,7 @@ epoch = 0
 
 # --- Networking setup ---
 client = socket.socket()
-client.connect(("127.0.0.1", 5000))
+client.connect(("127.0.0.1", 5003))
 
 password = input("Enter shared password: ")
 key = derive_key(password)

@@ -8,7 +8,7 @@ epoch = 0
 
 # --- Networking setup ---
 server = socket.socket()
-server.bind(("127.0.0.1", 5000))
+server.bind(("127.0.0.1", 5003))
 server.listen(1)
 print("Waiting for connection...")
 conn, addr = server.accept()
