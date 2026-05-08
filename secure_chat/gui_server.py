@@ -4,7 +4,7 @@ import tkinter as tk
 from crypto_utils import derive_key, encrypt, decrypt
 
 message_count = 0
-epoch = 0
+rotationCount = 0
 
 # --- Networking setup ---
 server = socket.socket()
@@ -19,7 +19,7 @@ key = derive_key(password)
 
 # --- GUI functions ---
 def send_message():
-    global message_count, epoch, key
+    global message_count, rotationCount, key
 
     msg = entry.get()
     entry.delete(0, tk.END)
@@ -33,12 +33,12 @@ def send_message():
     # --- KEY UPDATE LOGIC ---
     message_count += 1
     if message_count % 20 == 0:
-        epoch += 1
-        key = derive_key(password + str(epoch))
-        print(f"[KEY UPDATE] New key derived for epoch {epoch}")
+        rotationCount += 1
+        key = derive_key(password + str(rotationCount))
+        print(f"[KEY UPDATE] New key derived for rotationCount {rotationCount}")
 
 def receive_messages():
-    global message_count, epoch, key
+    global message_count, rotationCount, key
 
     while True:
         data = conn.recv(4096)
@@ -52,9 +52,9 @@ def receive_messages():
         # --- KEY UPDATE LOGIC ---
         message_count += 1
         if message_count % 20 == 0:
-            epoch += 1
-            key = derive_key(password + str(epoch))
-            print(f"[KEY UPDATE] New key derived for epoch {epoch}")
+            rotationCount += 1
+            key = derive_key(password + str(rotationCount))
+            print(f"[KEY UPDATE] New key derived for rotationCount {rotationCount}")
 
 # --- GUI setup ---
 root = tk.Tk()
