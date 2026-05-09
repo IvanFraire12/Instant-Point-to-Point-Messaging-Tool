@@ -43,7 +43,19 @@ secure_chat/
 │── gui_client.py
 │── gui_server.py
 │── crypto_utils.py
+│── bonus2_auth_utils.py
+│── bonus2_gui_client.py
+│── bonus2_gui_server.py
+│── bob__public.pem
+│── bob__private.pem
+│── alice__public.pem
+│── alice__private.pem
 │── README.md
+
+## File Organization
+The secure_chat folder contains the main project files: gui_client.py, gui_server.py, and crypto_utils.py. These files implement the required secure messaging system with the GUI, encryption, key derivation, random IVs, and periodic key updates.
+
+The bonus files are bonus2_gui_client.py, bonus2_gui_server.py, and bonus2_auth_utils.py. These are for the Bonus 2 extension, where Alice and Bob do not use a pre-shared password and instead authenticate each other and establish a shared session key using RSA. The included .pem files are demo RSA key files used for this bonus feature.
 
 ## Security Summary
 This project demonstrates several important security mechanisms:
